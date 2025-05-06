@@ -1,13 +1,13 @@
+#View
 from Model import *
 from View import *
-def display_menu():
-    print("\nВыбери действие: 1-выбрать уровень, 2-начать игру, 0-выйти")
-    choise = input("Выбери номер действия:")
+import flet as ft
 
-    return choise
-
-def show_levels(levels_list):
-    print("\nВыбери уровень:")
-    print("Уровни:")
-    for i, levels in enumerate(levels_list):
-        print(f"{i}. {levels}")
+def levels_menu():
+    label2 = ft.Text(levels)
+    input_fild2 = ft.TextFeld(label = "Введи номер уровня")
+    ouput_text = ft.Text()
+    
+    def on_button_click(e):
+        output_text.value = f"Вы выбрали: { input_field2.value}"
+        page.updaete() 

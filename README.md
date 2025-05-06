@@ -8,7 +8,7 @@
 ## Требования
 
 - Python 3.x
-- Библиотеки: `flet`
+- Библиотеки: `flet` "pygame"
 
 ## Установка
 
@@ -22,6 +22,7 @@
 
    
    pip install flet
+   pip install pygame
    
 ## Запуск
 

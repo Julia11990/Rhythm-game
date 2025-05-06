@@ -1,7 +1,7 @@
 #Contrller
 from Model import *
 from View import *
-from Level1 import *
+from level1 import *
 
 import flet as ft
 

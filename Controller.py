@@ -15,8 +15,8 @@ clock = pygame.time.Clock()  # Часы для контроля FPS
 pygame.mixer.music.load('music.mp3')
 pygame.mixer.music.play(-1)
 
-note_sound = pygame.mixer.Sound('note_sound.wav')
-bonus_sound = pygame.mixer.Sound('bonus_sound.wav')
+note_sound = pygame.mixer.Sound('zvuk-notyi-do-vo-vtoroy-oktave.wav')
+bonus_sound = pygame.mixer.Sound('zvuk-notyi-si.wav')
 
 interface = Interface()  # Создание интерфейса
 notes = []  # Список нот

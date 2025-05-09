@@ -1,16 +1,30 @@
 #Model
-levels = ["1"]
+import random
 
-actions ["1-выбрать уровень", "2-начать игру", "0-выйти"]
+class Note:
+    def __init__(self, x, y, speed):
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.radius = 30
 
-def add_levels(title):
-    levels.append(title)
-    
-def add_actions(title):
-    actions.append(title)
+    def move(self):
+        self.y += self.speed
 
-def get_levels():
-    return levels
-    
-def get_actions():
-    return actions
+    def draw(self, surface):
+        pygame.draw.circle(surface, (255, 255, 0), (self.x, int(self.y)), self.radius)
+
+
+class Bonus:
+    def __init__(self, x, y, speed):
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.radius = 20
+
+    def move(self):
+        self.y += self.speed
+
+    def draw(self, surface):
+        pygame.draw.circle(surface, (0, 255, 0), (self.x, int(self.y)), self.radius)
+

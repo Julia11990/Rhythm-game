@@ -1,13 +1,16 @@
 #View
-from Model import *
-from View import *
-import flet as ft
+import pygame
 
-def levels_menu():
-    label2 = ft.Text(levels)
-    input_fild2 = ft.TextFeld(label = "Введи номер уровня")
-    ouput_text = ft.Text()
-    
-    def on_button_click(e):
-        output_text.value = f"Вы выбрали: { input_field2.value}"
-        page.updaete() 
+class Interface:
+    def __init__(self):
+        self.font = pygame.font.SysFont(None, 36)
+
+    def draw_score(self, surface, score):
+        score_text = self.font.render(f'Счет: {score}', True, (255, 255, 255)) 
+        surface.blit(score_text, (10, 10))
+
+    def draw_game_over(self, surface):
+        game_over_text = self.font.render('Игра окончена!', True, (255, 0, 0))
+        restart_text = self.font.render('Нажмите R, чтобы перезапустить', True, (255, 255, 255))
+        surface.blit(game_over_text, (width // 2 - 100, height // 2 - 20))
+        surface.blit(restart_text, (width // 2 - 200, height // 2 + 20))

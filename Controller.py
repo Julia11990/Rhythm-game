@@ -1,99 +1,77 @@
 #Contrller
 import pygame
 import sys
-from Model import Note, Bonus
-from View import Interface
-import random
+from model import GameState, width, height
+from view import Interface, draw_note, draw_bonus
 
-pygame.init()  # Инициализация Pygame
+pygame.init()
 
-width, height = 600, 800  # Размеры окна
-window = pygame.display.set_mode((width, height))  # Создание окна
-clock = pygame.time.Clock()  # Часы для контроля FPS
+window = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Ритм игра")
+clock = pygame.time.Clock()
 
-# Загрузка музыки и звуков
-pygame.mixer.music.load('music.mp3')
-pygame.mixer.music.play(-1)
+# Музыка и звуки
+# pygame.mixer.music.load('assets/music.mp3')
+# pygame.mixer.music.play(-1)
+# note_sound = pygame.mixer.Sound('assets/note.wav')
+# bonus_sound = pygame.mixer.Sound('assets/bonus.wav')
 
-note_sound = pygame.mixer.Sound('zvuk-notyi-do-vo-vtoroy-oktave.wav')
-bonus_sound = pygame.mixer.Sound('zvuk-notyi-si.wav')
+interface = Interface()
+state = GameState()
 
-interface = Interface()  # Создание интерфейса
-notes = []  # Список нот
-bonuses = []  # Список бонусов
-
-note_spawn_time = 0  # Таймер для спавна нот
-bonus_spawn_time = 0  # Таймер для спавна бонусов
-score = 0  # Счет
-game_over = False  # Флаг окончания игры
-
+# Игровой цикл
 while True:
-    clock.tick(60)  # Ограничение FPS до 60
-    window.fill((30, 30, 30))  # Фон окна
+    clock.tick(60)
+    window.fill((30, 30, 30))
 
-    if not game_over:
-        note_spawn_time += 1  # Увеличение таймера спавна нот
-        if note_spawn_time > 60:
-            # Спавн новой ноты
-            notes.append(Note(random.randint(50, width - 50), 0, 5))
-            note_spawn_time = 0  # Сброс таймера
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
 
-        bonus_spawn_time += 1  # Увеличение таймера спавна бонусов
-        if bonus_spawn_time > 120:
-            # Спавн нового бонуса
-            bonuses.append(Bonus(random.randint(50, width - 50), 0, 5))
-            bonus_spawn_time = 0  # Сброс таймера
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and not state.game_over:
+                for note in state.notes:
+                    if 700 < note.y < 770:
+                        state.score += 1
+                        # note_sound.play()
+                        state.notes.remove(note)
+                        break
+                for bonus in state.bonuses:
+                    if 700 < bonus.y < 770:
+                        state.score += 5
+                        # bonus_sound.play()
+                        state.bonuses.remove(bonus)
+                        break
 
-        for event in pygame.event.get():  # Обработка событий
-            if event.type == pygame.QUIT:
-                pygame.quit()  # Закрытие игры
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    # Проверка нажатия пробела для захвата нот и бонусов
-                    for note in notes:
-                        if 700 < note.y < 770:  # Если нота достигла определенной высоты
-                            score += 1
-                            note_sound.play()  # Проигрывание звука
-                            notes.remove(note)  # Удаление ноты
-                            break
-                    for bonus in bonuses:
-                        if 700 < bonus.y < 770:  # Если бонус достиг определенной высоты
-                            
-                            score += 5
-                            bonus_sound.play()  # Проигрывание звука
-                            bonuses.remove(bonus)  # Удаление бонуса
-                            break
-                if event.key == pygame.K_r and game_over:
-                    # Перезапуск игры
-                    score = 0
-                    game_over = False
-                    notes.clear()  # Очистка нот
-                    bonuses.clear()  # Очистка бонусов
+            if event.key == pygame.K_r and state.game_over:
+                state.init()  # Сброс состояния игры
+
+    if not state.game_over:
+        # Спавн
+        state.note_spawn_timer += 1
+        state.bonus_spawn_timer += 1
+        if state.note_spawn_timer > 60:
+            state.spawn_note()
+            state.note_spawn_timer = 0
+        if state.bonus_spawn_timer > 120:
+            state.spawn_bonus()
+            state.bonus_spawn_timer = 0
 
         # Движение и отрисовка нот
-        for note in notes:
+        for note in state.notes[:]:
             note.move()
-            note.draw(window)
-            if note.y > height:  # Проверка на выход за экран
-                game_over = True
-
-        # Движение и отрисовка бонусов
-        for bonus in bonuses:
+            draw_note(window, note)
+            if note.y > height:
+                state.game_over = True
+            for bonus in state.bonuses[:]:
             bonus.move()
-            bonus.draw(window)
-            if bonus.y > height:  # Проверка на выход за экран
-                game_over = True
+            draw_bonus(window, bonus)
+            if bonus.y > height:
+                state.game_over = True
 
-        interface.draw_score(window, score)  # Отображение счета
+            interface.draw_score(window, state.score)
+        else:
+            interface.draw_game_over(window)
 
-    else:
-        interface.draw_game_over(window)  # Отображение сообщения об окончании игры
-
-    pygame.display.flip()  # Обновление экрана
- 
-
-
-
-
-
+            pygame.display.flip()

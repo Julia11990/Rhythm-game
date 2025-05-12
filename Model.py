@@ -1,31 +1,41 @@
 #Model
 import random
 
+width, height = 600, 800  # Используется в контроллере и моделях
+
 class Note:
-    def __init__(self, x, y, speed):
-        self.x = x  # Позиция по оси X
-        self.y = y  # Позиция по оси Y
-        self.speed = speed  # Скорость падения
-        self.radius = 30  # Радиус ноты
+    def init(self, x, y, speed):
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.radius = 30
 
     def move(self):
-        self.y += self.speed  # Перемещение вниз по Y
-
-    def draw(self, surface):
-        # Рисование ноты 
-        pygame.draw.circle(surface, (255, 255, 0), (self.x, int(self.y)), self.radius)
+        self.y += self.speed
 
 
 class Bonus:
-    def __init__(self, x, y, speed):
-        self.x = x  # Позиция по оси X
-        self.y = y  # Позиция по оси Y
-        self.speed = speed  # Скорость падения
-        self.radius = 20  # Радиус бонуса
+    def init(self, x, y, speed):
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.radius = 20
 
     def move(self):
-        self.y += self.speed  # Перемещение вниз по Y
+        self.y += self.speed
 
-    def draw(self, surface):
-        # Рисование бонуса
-        pygame.draw.circle(surface, (0, 255, 0), (self.x, int(self.y)), self.radius)
+
+class GameState:
+    def init(self):
+        self.notes = []
+        self.bonuses = []
+        self.note_spawn_timer = 0
+        self.bonus_spawn_timer = 0
+        self.score = 0
+        self.game_over = False
+
+    def spawn_note(self):
+        self.notes.append(Note(random.randint(50, width - 50), 0, 5))
+
+    def spawn_bonus(self):
+        self.bonuses.append(Bonus(random.randint(50, width - 50), 0, 5))

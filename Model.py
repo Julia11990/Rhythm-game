@@ -1,7 +1,7 @@
 #Model
 import random
 
-width, height = 600, 800  # Используется в контроллере и моделях
+width, height = 600, 800  
 
 class Note:
     def init(self, x, y, speed):

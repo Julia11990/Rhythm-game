@@ -11,10 +11,10 @@ pygame.display.set_caption("Ритм игра")
 clock = pygame.time.Clock()
 
 # Музыка и звуки
-# pygame.mixer.music.load('assets/music.mp3')
-# pygame.mixer.music.play(-1)
-# note_sound = pygame.mixer.Sound('assets/note.wav')
-# bonus_sound = pygame.mixer.Sound('assets/bonus.wav')
+pygame.mixer.music.load('assets/music.mp3')
+pygame.mixer.music.play(-1)
+note_sound = pygame.mixer.Sound('zvuk-notyi-do-vo-vtoroy-oktave.wav')
+bonus_sound = pygame.mixer.Sound('zvuk-notyi-si.wav')
 
 interface = Interface()
 state = GameState()
